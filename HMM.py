@@ -131,7 +131,7 @@ def CreateAlphas(visibleStateList,aij_df,bjk_df):
 	
 	alpha_df = pd.DataFrame(data=alpha, index = val, columns = ['W0:Sunny','W1:Rainy','W2:Foggy'])
 	alpha_df = alpha_df.swapaxes("index", "columns") 
-	print("=================== Alpha Matrix ====================\n",alpha_df,"\n")
+	print("========================== Alpha Matrix ================================\n",alpha_df,"\n")
 	return alpha
 		
 #function to calculate hiden states using vertibri algorithm		
@@ -153,10 +153,13 @@ if __name__ == "__main__":
 	print("=========================== A_ij (Tarnsitions Probabilities) Matrix ==========================\n",Aij_Matrix,"\n")
 	Bjk_Matrix = CreateEmitionProbs(dataset)
 	print("=========================== B_jk (Emission Probabilities) Matrix ==========================\n",Bjk_Matrix,"\n")
+	print("=========================================================================================================")
 	VT =  ['no', 'no', 'no', 'yes', 'no', 'no', 'yes', 'yes', 'no', 'yes']
-	output_state = RunVertibri(VT,Aij_Matrix,Bjk_Matrix)
 	print("Input: Visibale State Sequence to HMM Model: ",VT)
+	output_state = RunVertibri(VT,Aij_Matrix,Bjk_Matrix)
+	print("=========================================================================================================")
 	print("Output: Hidden State Sequence: ",output_state)
+	print("=========================================================================================================")
 
 
 
