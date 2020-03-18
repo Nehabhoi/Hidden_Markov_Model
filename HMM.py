@@ -16,7 +16,7 @@ def LoadData():
 	dataset=pd.read_csv("./Project2Data.txt",delimiter=",",header=None)
 	return dataset
 
-# This fucntion creates a_ij matrix	
+# This function creates a_ij matrix	
 def CreateTransitionProbs(dataset):
 	previous_row = []
 	sunny_sunny , sunny_rainy , sunny_foggy = 0,0,0
@@ -46,7 +46,7 @@ def CreateTransitionProbs(dataset):
 		else:
 			previous_row = row
 
-	#Calculate individual transmisiion Probabiliteies 
+	#Calculate individual transmission Probabilities 
 	prob_sunny_sunny = sunny_sunny / (sunny_sunny + sunny_rainy + sunny_foggy)
 	prob_sunny_rainy = sunny_rainy / (sunny_sunny + sunny_rainy + sunny_foggy)
 	prob_sunny_foggy = sunny_foggy / (sunny_sunny + sunny_rainy + sunny_foggy)
@@ -67,7 +67,7 @@ def CreateTransitionProbs(dataset):
 	return aij_df
 
 # This fucntion creates b_jk matrix	
-def CreateEmitionProbs(dataset):
+def CreateEmissionProbs(dataset):
 	sunny_yes, sunny_no = 0 ,0
 	rainy_yes, rainy_no = 0, 0
 	foggy_yes, foggy_no = 0, 0
@@ -134,8 +134,8 @@ def CreateAlphas(visibleStateList,aij_df,bjk_df):
 	print("========================== Alpha Matrix ================================\n",alpha_df,"\n")
 	return alpha
 		
-#function to calculate hiden states using vertibri algorithm		
-def RunVertibri(visibleStateList,aij_df,bjk_df):
+#function to calculate hidden states using viterbi algorithm		
+def RunViterbi(visibleStateList,aij_df,bjk_df):
 	visbleStateListIndex = convert_to_stateindex(visibleStateList)
 	forward_output = CreateAlphas(visbleStateListIndex,aij_df,bjk_df)
 	
@@ -150,15 +150,15 @@ if __name__ == "__main__":
 	dataset = LoadData()
 	hidden_states = ['sunny','rainy','foggy']
 	Aij_Matrix = CreateTransitionProbs(dataset)
-	print("=========================== A_ij (Tarnsitions Probabilities) Matrix ==========================\n",Aij_Matrix,"\n")
-	Bjk_Matrix = CreateEmitionProbs(dataset)
+	print("=========================== A_ij (Transition Probabilities) Matrix ==========================\n",Aij_Matrix,"\n")
+	Bjk_Matrix = CreateEmissionProbs(dataset)
 	print("=========================== B_jk (Emission Probabilities) Matrix ==========================\n",Bjk_Matrix,"\n")
 	print("=========================================================================================================")
 	VT =  ['no', 'no', 'no', 'yes', 'no', 'no', 'yes', 'yes', 'no', 'yes']
-	print("Input: Visibale State Sequence to HMM Model: ",VT)
-	output_state = RunVertibri(VT,Aij_Matrix,Bjk_Matrix)
+	print("Input - Visible State Sequence to HMM Model: ",VT)
+	output_state = RunViterbi(VT,Aij_Matrix,Bjk_Matrix)
 	print("=========================================================================================================")
-	print("Output: Hidden State Sequence: ",output_state)
+	print("Output - Hidden State Sequence: ",output_state)
 	print("=========================================================================================================")
 
 
