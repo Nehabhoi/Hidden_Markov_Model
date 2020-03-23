@@ -66,7 +66,7 @@ def CreateTransitionProbs(dataset):
 	aij_df.loc[hidden_states[2]] = [prob_foggy_sunny,prob_foggy_rainy,prob_foggy_foggy]
 	return aij_df
 
-# This fucntion creates b_jk matrix	
+# This function creates b_jk matrix	
 def CreateEmissionProbs(dataset):
 	sunny_yes, sunny_no = 0 ,0
 	rainy_yes, rainy_no = 0, 0
@@ -122,16 +122,10 @@ def CreateAlphas(visibleStateList,aij_df,bjk_df):
 	initial_distribution=np.array((1,0,0))
 	v = visibleStateList
 	alpha = np.zeros((len(v), a.shape[0]))
-	alpha[0, :] = initial_distribution * b[:, v[0]]
-	val = ["T0"]
+	alpha[0, :] = initial_distribution
 	for t in range(1, len(v)):
-		val.append("T"+str(t))
 		for j in range(a.shape[0]):
-			alpha[t, j] = alpha[t - 1].dot(a[:, j]) * b[j, v[t]]
-	
-	alpha_df = pd.DataFrame(data=alpha, index = val, columns = ['W0:Sunny','W1:Rainy','W2:Foggy'])
-	alpha_df = alpha_df.swapaxes("index", "columns") 
-	print("========================== Alpha Matrix ================================\n",alpha_df,"\n")
+			alpha[t, j] = alpha[t - 1].dot(a[:, j]) * b[j, v[t-1]]
 	return alpha
 		
 #function to calculate hidden states using viterbi algorithm		
@@ -154,13 +148,28 @@ if __name__ == "__main__":
 	Bjk_Matrix = CreateEmissionProbs(dataset)
 	print("=========================== B_jk (Emission Probabilities) Matrix ==========================\n",Bjk_Matrix,"\n")
 	print("=========================================================================================================")
-	VT =  ['no', 'no', 'no', 'yes', 'no', 'no', 'yes', 'yes', 'no', 'yes']
-	print("Input - Visible State Sequence to HMM Model: ",VT)
-	output_state = RunViterbi(VT,Aij_Matrix,Bjk_Matrix)
-	print("=========================================================================================================")
-	print("Output - Hidden State Sequence: ",output_state)
-	print("=========================================================================================================")
+	#VT =  ['no', 'no', 'no', 'yes', 'no', 'no', 'yes', 'yes', 'no', 'yes']
+	#print("Input - Visible State Sequence to HMM Model: ",VT)
+	#output_state = RunViterbi(VT,Aij_Matrix,Bjk_Matrix)
+	#print("=========================================================================================================")
+	#print("Output - Hidden State Sequence: ",output_state)
+	#print("=========================================================================================================")
 
+	VT =  ['no', 'no', 'no', 'yes', 'no', 'no', 'yes', 'yes', 'no', 'yes']
+	print("=========================== Input - Visible State Sequence to HMM Model ==========================\n",VT,"\n")
+
+	alpha_matrix = CreateAlphas(convert_to_stateindex(VT),Aij_Matrix,Bjk_Matrix)
+	val = ["T0"]
+	for t in range(1, len(VT)):
+		val.append("T" + str(t))
+	alpha_df = pd.DataFrame(data=alpha_matrix, index = val, columns = ['W0:Sunny','W1:Rainy','W2:Foggy'])
+	alpha_df = alpha_df.swapaxes("index", "columns") 
+	visible_sequence_prob = np.sum(alpha_matrix[-1])
+	output_state = RunViterbi(VT,Aij_Matrix,Bjk_Matrix)
+
+	print("=========================== Output - Alpha Matrix ==========================\n",alpha_df,"\n")
+	print("=========================== Output - Probability of the visible sequence ==========================\n", visible_sequence_prob,"\n")
+	print("=========================== Output - Hidden State Sequence ==========================\n", output_state,"\n")
 
 
 
