@@ -148,12 +148,6 @@ if __name__ == "__main__":
 	Bjk_Matrix = CreateEmissionProbs(dataset)
 	print("=========================== B_jk (Emission Probabilities) Matrix ==========================\n",Bjk_Matrix,"\n")
 	print("=========================================================================================================")
-	#VT =  ['no', 'no', 'no', 'yes', 'no', 'no', 'yes', 'yes', 'no', 'yes']
-	#print("Input - Visible State Sequence to HMM Model: ",VT)
-	#output_state = RunViterbi(VT,Aij_Matrix,Bjk_Matrix)
-	#print("=========================================================================================================")
-	#print("Output - Hidden State Sequence: ",output_state)
-	#print("=========================================================================================================")
 
 	VT =  ['no', 'no', 'no', 'yes', 'no', 'no', 'yes', 'yes', 'no', 'yes']
 	print("=========================== Input - Visible State Sequence to HMM Model ==========================\n",VT,"\n")
