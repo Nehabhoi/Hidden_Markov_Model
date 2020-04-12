@@ -15,5 +15,5 @@
 ## About The Project
 
 In this project we have build a simple HMM model for a discrete dataset. <br />
-Using this HMM model we found the probability of the visible sequence. <br />
-using forward algorithm. Also we found the Hidden State Sequence for the same.<br />
+Using this HMM model we found the probability of the visible sequence using forward algorithm.  <br />
+Also we found the Hidden State Sequence for the same.<br />
